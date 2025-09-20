@@ -15,12 +15,20 @@ async def something(event: hikari.MessageCreateEvent) -> None:
     if not event.is_human:
         return
     
-    if event.content and event.content.startswith("hu!"):
-        message = event.content[3:].strip()
-
-        answer = llm_answer(message)
-        
-        await event.message.respond(answer)
+    if not event.content or not event.content.startswith("hu!"):
+        return
+    
+    content = event.content[3:].strip()
+    command = content.split(" ")[0]
+    message = " ".join(content.split(" ")[1:])
+    
+    match command:
+        case "ping":
+            await event.message.respond("Pong")
+    
+        case "chat":
+            answer = llm_answer(message)
+            await event.message.respond(answer)
 
         
 bot.run()
