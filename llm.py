@@ -7,24 +7,25 @@ import json
 model = ChatOllama(model="gemma2:latest", validate_model_on_init=True)
 
 
-with open("dataset.json") as f:
-    examples = json.loads(f.read())
+# with open("dataset.json") as f:
+#     examples = json.loads(f.read())
 
-    example_prompt = ChatPromptTemplate.from_messages([
-        ("human", "{input}"),
-        ("ai", "{output}")
-    ])
+#     example_prompt = ChatPromptTemplate.from_messages([
+#         ("human", "{input}"),
+#         ("ai", "{output}")
+#     ])
     
-    few_shot_examples = FewShotChatMessagePromptTemplate(
-        example_prompt=example_prompt,
-        examples=examples
-    )
+#     few_shot_examples = FewShotChatMessagePromptTemplate(
+#         example_prompt=example_prompt,
+#         examples=examples
+#     )
    
-    
+# TODO: optimization of training. FewShotChatMessagePromptTemplate seems slow
+  
 with open("prompt.txt") as f:
     prompt_template = ChatPromptTemplate.from_messages([
         SystemMessage(content=f.read()),
-        few_shot_examples,
+        # few_shot_examples,            
         MessagesPlaceholder("messages")
     ])
     

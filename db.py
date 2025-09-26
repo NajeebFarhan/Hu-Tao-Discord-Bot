@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Integer, String, Text
+from sqlalchemy import create_engine, Integer, String, Text, Enum 
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, mapped_column, Mapped
 
 
@@ -17,6 +17,7 @@ class Chat(Base):
         id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
         message: Mapped[str] = mapped_column(Text)
         user_id: Mapped[str] = mapped_column(String)
+        role: Mapped[str] = mapped_column(Enum(enums=["ai", "human", "user", "system"]))
         message_id: Mapped[str] = mapped_column(String)
         channel_id: Mapped[str] = mapped_column(String)
         
