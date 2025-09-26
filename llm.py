@@ -8,6 +8,7 @@ import json
 model = ChatOllama(model="gemma2:latest", validate_model_on_init=True)
 
 
+# TODO: optimization of training. FewShotChatMessagePromptTemplate seems slow
 # with open("dataset.json") as f:
 #     examples = json.loads(f.read())
 
@@ -21,8 +22,8 @@ model = ChatOllama(model="gemma2:latest", validate_model_on_init=True)
 #         examples=examples
 #     )
    
-# TODO: optimization of training. FewShotChatMessagePromptTemplate seems slow
-  
+
+# fetch prompt from prompt.txt
 with open("prompt.txt") as f:
     prompt_template = ChatPromptTemplate.from_messages([
         SystemMessage(content=f.read()),
@@ -31,12 +32,15 @@ with open("prompt.txt") as f:
     ])
     
 
+# retrive message_history from db
 message_history = []
 
 with SessionLocal() as session:
     message_data = session.query(Chat).all()
     message_history = [(m.role, m.message) for m in message_data]
 
+
+# function to provide response to a message
 def llm_answer(message: str):
     message_history.append(("human", message))
         

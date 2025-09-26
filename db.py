@@ -6,7 +6,6 @@ engine = create_engine(url="sqlite:///chatdata.db", echo=True)
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
-# TODO:implement db to store chat messages
 
 ### MODEL ###
 class Base(DeclarativeBase): pass
@@ -17,7 +16,7 @@ class Chat(Base):
         id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
         message: Mapped[str] = mapped_column(Text)
         user_id: Mapped[str] = mapped_column(String)
-        role: Mapped[str] = mapped_column(Enum(enums=["ai", "human", "user", "system"]))
+        role: Mapped[str] = mapped_column(String) #Enum(enums=["ai", "human", "user", "system"]))
         message_id: Mapped[str] = mapped_column(String)
         channel_id: Mapped[str] = mapped_column(String)
         
