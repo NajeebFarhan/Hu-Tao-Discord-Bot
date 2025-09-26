@@ -1,6 +1,7 @@
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, FewShotChatMessagePromptTemplate
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from db import SessionLocal, Chat
 import json
 
 
@@ -32,14 +33,18 @@ with open("prompt.txt") as f:
 
 message_history = []
 
+with SessionLocal() as session:
+    message_data = session.query(Chat).all()
+    message_history = [(m.role, m.message) for m in message_data]
+
 def llm_answer(message: str):
-    message_history.append(HumanMessage(content=message))
+    message_history.append(("human", message))
         
     prompt = prompt_template.invoke({"messages": message_history})
 
     data = model.invoke(prompt)
-    answer = data.content
+    answer: str = data.content  # type: ignore
     
-    message_history.append(AIMessage(content=answer))
+    message_history.append(("ai", answer))
     
     return answer

@@ -55,13 +55,11 @@ async def something(event: hikari.MessageCreateEvent) -> None:
             
             try: 
                 # TODO: FIX DB ISSUE
-                pass
-                # with SessionLocal() as session:
-                    # session.add(human_chat)
-                    # session.commit()
-                    
-                    # session.add(ai_chat)
-                    # session.commit()
+                # pass
+                with SessionLocal() as session:
+                    session.add(human_chat)
+                    session.add(ai_chat)
+                    session.commit()
                     
                     # data = session.query(Chat).all()
                 
