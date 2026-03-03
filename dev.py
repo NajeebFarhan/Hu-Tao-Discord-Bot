@@ -33,7 +33,7 @@ if __name__ == "__main__":
     try:
         process = start_process()
 
-        for _ in watch("./src/", recursive=True):
+        for _ in watch("./src/"):
             print("File change detected. Reloading...")
             stop_process(process)
             process = start_process()
