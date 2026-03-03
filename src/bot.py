@@ -45,7 +45,7 @@ async def on_message(message: discord.message.Message) -> None:
     # dm = await user.create_dm()
     
     # await dm.send("Hello")
-    await message.reply("hello")
+    await message.reply("hello", mention_author=False)
     
     
 

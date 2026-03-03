@@ -1,8 +1,8 @@
 dev:
-    watchfiles uv run src.bot:main
+    uv run dev.py
 
 run:
-    uv run python src/bot.py
+    uv run src/bot.py
 
 
 lint:
