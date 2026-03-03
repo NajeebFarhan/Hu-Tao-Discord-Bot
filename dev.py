@@ -28,7 +28,7 @@ def stop_process(proc):
 if __name__ == "__main__":
     process = start_process()
 
-    for changes in watch(".", recursive=True):
+    for changes in watch("./src", recursive=True):
         print("File change detected. Reloading...")
         stop_process(process)
         process = start_process()

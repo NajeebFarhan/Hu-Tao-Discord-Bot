@@ -1,4 +1,5 @@
 import discord
+import logging
 from dotenv import load_dotenv
 import os
 
@@ -6,6 +7,8 @@ load_dotenv()
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 BOT_PREFIX = os.environ["BOT_PREFIX"]
+
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -37,18 +40,10 @@ async def on_message(message: discord.message.Message) -> None:
     contexts = content.split(" ")
     
     command = contexts[0]
-    
-    text = " ".join(contexts[1:])
-    # print(contexts)
-    # user = await client.fetch_user(message.author.id)
-    
-    # dm = await user.create_dm()
-    
-    # await dm.send("Hello")
-    await message.reply("hello", mention_author=False)
+ 
     
     
 
  
 if __name__ == "__main__":
-    client.run(BOT_TOKEN)
+    client.run(BOT_TOKEN, log_handler=handler)
