@@ -14,3 +14,6 @@ wheels/
 
 # Logs
 *.log
+
+# Bot's Memeory
+memory/
