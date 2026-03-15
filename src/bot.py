@@ -29,12 +29,10 @@ async def on_connect() -> None:
 from commands.ping import ping
 from commands.chat import chat
 from commands.delete_msg import deletemsg
-# from commands.help import help
 
 bot.add_command(ping)
 bot.add_command(chat)
 bot.add_command(deletemsg)
-# bot.add_command(help)
 
  
 if __name__ == "__main__":

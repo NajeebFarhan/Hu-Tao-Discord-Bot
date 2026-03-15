@@ -1,31 +1,22 @@
 from langchain.agents import create_agent
-from langchain.tools import tool, ToolRuntime
-from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_ollama.chat_models import ChatOllama
 from langchain.messages import HumanMessage, AIMessage, SystemMessage
-import sqlite3
 from langgraph.checkpoint.sqlite import SqliteSaver
+
+# from agent.tools import get_current_datetime, get_search_result
+from .tools import search_result_tool, current_datetime_tool
+ 
+import sqlite3
+
 import discord
+
 from dataclasses import dataclass
-from dotenv import load_dotenv
-from typing import Any
-
-load_dotenv()
 
 
-search = TavilySearchResults()
 
 
-@tool
-def get_current_datetime() -> str:
-    """
-    Returns the current system date and time.
-    Useful when the LLM needs to know the current time.
-    """
-    from datetime import datetime
 
-    now = datetime.now()
-    return now.strftime("%Y-%m-%d %H:%M:%S")
+
 
 
 # @tool
@@ -48,7 +39,7 @@ def get_current_datetime() -> str:
     
 
 
-tools = [get_current_datetime, search]
+tools = [search_result_tool, current_datetime_tool]
 
 
 conn = sqlite3.connect("memory/agent_memory.db", check_same_thread=False)
@@ -86,4 +77,57 @@ def chatbot_answer(prompt: str, user_id: int, attachments) -> str:
     return content
 
 
-# print(result["messages"][-1].content)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# import os
+
+# img = os.path.join(os.path.abspath('.'), "src\\agent\\adorable-baby-panda-cub-eating-bamboo-on-a-tree-branch-in-a-lush-green-forest-habitat-photo.jpeg")
+
+# import base64
+
+# def image_to_data_url(path):
+#     with open(path, "rb") as f:
+#         encoded = base64.b64encode(f.read()).decode()
+#     return f"data:image/jpeg;base64,{encoded}"
+
+# image = image_to_data_url(img)
+
+# message = HumanMessage(
+#     content=[
+#         {"type": "text", "text": "What is in this image?"},
+#         {
+#             "type": "image_url",
+#             "image_url": image
+#         }
+#     ]
+# )
+
+# # response = ollama.chat(
+# #     model="qwen3-vl:2b",
+# #     messages=[
+# #         {
+# #             "role": "user",
+# #             "content": "Describe this image",
+# #             "images": [img]
+# #         }
+# #     ]
+# # )
+
+# # print(response["message"]["content"])
+
+# print(model.invoke([message]))
+
+# # print(result["messages"][-1].content)

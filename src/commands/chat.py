@@ -10,7 +10,8 @@ async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy
     
     text = " ".join(tokens)
     
-    async with ctx.typing():
-        answer = chatbot_answer(text, ctx.author.id, attachments)
+    # async with ctx.typing():
+        # answer = chatbot_answer(text, ctx.author.id, attachments)
 
-    await ctx.reply(answer)
+    # await ctx.reply(answer)
+    await ctx.reply("test reply")
