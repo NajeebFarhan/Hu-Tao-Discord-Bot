@@ -2,5 +2,6 @@
 # from .search_result import get_search_result
 
 # TOOLS = [get_current_datetime, get_search_result]
-from .search_result import search_result_tool
+# from .search_result import search_result_tool
 from .current_datetime import current_datetime_tool
+from .analyze_images import analyze_images_tool
