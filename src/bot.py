@@ -26,13 +26,10 @@ async def on_connect() -> None:
     print("Connected to Discord")
     
 
-from commands.ping import ping
-from commands.chat import chat
-from commands.delete_msg import deletemsg
+from commands import COMMANDS
 
-bot.add_command(ping)
-bot.add_command(chat)
-bot.add_command(deletemsg)
+for cmm in COMMANDS:
+    bot.add_command(cmm)
 
  
 if __name__ == "__main__":
