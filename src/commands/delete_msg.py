@@ -1,11 +1,38 @@
 from discord.ext import commands
-import discord
+from agent.model import clear_chat
 import os
 
 
 @commands.command()
 async def deletemsg(ctx: commands.Context) -> None:
-    pass
+    bot: commands.Bot = ctx.bot
+    
+    confirmation_msg_ref = await ctx.reply("To delete your chat history, type \"yes\" withing 10 seconds")
+    
+    def check(m):
+        return (
+            m.reference
+            and m.reference.message_id == confirmation_msg_ref.id
+            and m.author == ctx.author
+        )
+
+    try:
+        user_reply = await bot.wait_for("message", check=check, timeout=10)
+
+        if user_reply.content == "yes":
+            try:
+                # clear_chat(ctx.author.id)
+                await ctx.reply("Your chat history has been deleted")
+        
+            except:
+                await ctx.reply("Something went wrong. Your chat history is not deleted")
+        else:
+            await ctx.reply("Incorrect response. This action has been aborted")
+            
+    except:
+        await ctx.reply("Timeout! Your chat history is not deleted")
+    
+    
 
 
 @commands.command()
@@ -37,7 +64,7 @@ async def deleteall(ctx: commands.Context) -> None:
             os.remove("memory/agent_memory.db")
             await ctx.reply("The whole database has been nuked")
         else:
-            await ctx.reply("Ehh! Wrong text, the database is not deleted and the chats are still safe.")
+            await ctx.reply("Ehh! Wrong text, the database is not deleted and the chats are still safe")
             
     except:
-        await ctx.reply("Timeout! The database is not deleted and all the chats are still safe.")
+        await ctx.reply("Timeout! The database is not deleted and all the chats are still safe")

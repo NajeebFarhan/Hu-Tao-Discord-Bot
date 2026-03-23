@@ -5,27 +5,25 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from langchain.tools import tool, ToolRuntime
 import sqlite3
 from dotenv import load_dotenv
-from agent.tools import current_datetime_tool, analyze_images_tool, search_result_tool 
+from agent.tools import current_datetime_tool, analyze_images_tool, search_result_tool
 from agent.libs.context_schema import Context
+from typing import Any
 
 
-load_dotenv()  
+load_dotenv()
 
 
-tools = [current_datetime_tool, analyze_images_tool, search_result_tool]
+# tools = [current_datetime_tool, analyze_images_tool, search_result_tool]
+tools = [current_datetime_tool, search_result_tool]
 
 
 conn = sqlite3.connect("memory/agent_memory.db", check_same_thread=False)
 checkpointer = SqliteSaver(conn)
 
 
-
-
-
 # model = ChatOllama(model="llama3.2:3b")
 # model = ChatOllama(model="gemma3:12b")
 model = ChatOllama(model="ministral-3:8b")
-
 
 
 agent = create_agent(
@@ -39,16 +37,40 @@ agent = create_agent(
 
 def chatbot_answer(prompt: str, user_id: int, attachments) -> str:
     config = {"configurable": {"thread_id": user_id}}
+    
+    content: list[dict[Any, Any]] = [
+        {"type": "text", "text": prompt},
+    ]
+    
+    for attachment in attachments:
+        content.append({"type": "image", "url": attachment.url})
 
     result = agent.invoke(
-        {"messages": [HumanMessage(prompt)]},
+        {"messages": [HumanMessage(content_blocks=content)]}, # type:ignore
         config=config,  # type:ignore
         context=Context(user_id, prompt, attachments),
     )
-
+    print(result)
     content = result["messages"][-1].content
+    print(content)
 
     # print(result)
     # print(content)
-    
+
     return content
+
+
+def clear_chat(user_id: int) -> None:
+    try:
+        checkpointer.delete_thread(str(user_id))
+
+    except:
+        raise Exception
+
+
+def show_history(user_id: int) -> None:
+    config = {"configurable": {"thread_id": user_id}}
+
+    chat_history = checkpointer.get(config)  # type:ignore
+
+    print(chat_history)
