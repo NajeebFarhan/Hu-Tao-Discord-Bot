@@ -1,8 +1,7 @@
 from discord.ext import commands
 import discord
-from agent.model import chatbot_answer
-import os
-import asyncio
+from agent.libs.chatbot_answer import chatbot_answer
+
 
 @commands.command()
 async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy[discord.Attachment]) -> None:
@@ -14,9 +13,7 @@ async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy
     
     await ctx.typing()
     
-    # print(text)
     answer = chatbot_answer(text, ctx.author.id, attachments)
-    # print(answer)
 
     try:
         await ctx.reply(answer)

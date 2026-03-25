@@ -1,5 +1,5 @@
 from discord.ext import commands
-from agent.model import show_history
+from agent.libs.history import show_history
 
 
 def truncate(text: str, limit: int = 60) -> str:

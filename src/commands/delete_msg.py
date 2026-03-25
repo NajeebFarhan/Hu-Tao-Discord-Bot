@@ -1,5 +1,5 @@
 from discord.ext import commands
-from agent.model import clear_chat
+from agent.libs.clear_chat import clear_chat
 import os
 
 
