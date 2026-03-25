@@ -14,13 +14,14 @@ conn = sqlite3.connect("memory/agent_memory.db", check_same_thread=False)
 checkpointer = SqliteSaver(conn)
 
 
-model = ChatOllama(model="ministral-3:8b")
+model = ChatOllama(model="ministral-3:8b", num_predict=2_000)
 
 
 agent = create_agent(
     model=model,
+    
     tools=TOOLS,
-    system_prompt="Your name is Hu Tao. You are a helpful Discord bot. Keep you response under 100 words",
+    system_prompt="Your name is Hu Tao. You are a helpful Discord bot. Keep you response under 2000 characters",
     checkpointer=checkpointer,
     context_schema=Context,
 )
