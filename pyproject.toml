@@ -13,6 +13,7 @@ dependencies = [
     "langchain-tavily>=0.2.17",
     "langgraph>=1.0.10",
     "langgraph-checkpoint-sqlite>=3.0.3",
+    "pillow>=12.1.1",
     "python-dotenv>=1.2.1",
     "watchfiles>=1.1.1",
 ]

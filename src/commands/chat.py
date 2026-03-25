@@ -6,9 +6,9 @@ import asyncio
 
 @commands.command()
 async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy[discord.Attachment]) -> None:
-    if int(os.environ["OWNER_ID"]) != ctx.author.id:
-        await ctx.reply("Sorry, this command is temporary unavailable.", mention_author=False)
-        return
+    # if int(os.environ["OWNER_ID"]) != ctx.author.id:
+    #     await ctx.reply("Sorry, this command is temporary unavailable.", mention_author=False)
+    #     return
     
     text = " ".join(tokens)
     

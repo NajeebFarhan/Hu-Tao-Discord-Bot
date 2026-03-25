@@ -7,7 +7,7 @@ import os
 async def deletemsg(ctx: commands.Context) -> None:
     bot: commands.Bot = ctx.bot
     
-    confirmation_msg_ref = await ctx.reply("To delete your chat history, type \"yes\" withing 10 seconds")
+    confirmation_msg_ref = await ctx.reply("To delete your chat history, reply this message with `yes` within 10 seconds")
     
     def check(m):
         return (
@@ -21,7 +21,7 @@ async def deletemsg(ctx: commands.Context) -> None:
 
         if user_reply.content == "yes":
             try:
-                # clear_chat(ctx.author.id)
+                clear_chat(ctx.author.id)
                 await ctx.reply("Your chat history has been deleted")
         
             except:

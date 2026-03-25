@@ -22,6 +22,7 @@ def analyze_images_tool(runtime: ToolRuntime[Context]) -> str:
     
     This tool will return descriptive text about the image, send this as the output to the user.
     """
+    print("analyze image tool called!")
     images_urls = [
         attachment.url
         for attachment in runtime.context.attachments
