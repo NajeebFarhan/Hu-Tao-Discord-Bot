@@ -1,3 +1,9 @@
+###############################################
+# Obsolete code I kept for archive purpose.
+# Deleting this does not effect the program.
+# I am keeping it because the code here might 
+# be helpful later in future for other projects.
+###############################################
 from langchain.tools import tool, ToolRuntime
 import ollama
 import discord
