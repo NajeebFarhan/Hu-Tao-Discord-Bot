@@ -13,9 +13,9 @@ async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy
     
     await ctx.typing()
     
-    answer = chatbot_answer(text, ctx.author.id, attachments)
-
     try:
+        answer = chatbot_answer(text, ctx.author.id, attachments)
+
         await ctx.reply(answer)
     except:
-        print(answer)
+        await ctx.reply("Something went wrong")
