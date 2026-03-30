@@ -2,6 +2,7 @@ from langchain.agents import create_agent
 from langchain_ollama.chat_models import ChatOllama
 from langgraph.checkpoint.sqlite import SqliteSaver
 import sqlite3
+import os
 from dotenv import load_dotenv
 from agent.tools import TOOLS
 from agent.libs.context_schema import Context
@@ -14,7 +15,12 @@ conn = sqlite3.connect("memory/agent_memory.db", check_same_thread=False)
 checkpointer = SqliteSaver(conn)
 
 
-model = ChatOllama(model="ministral-3:8b", num_predict=1800, temperature=0)
+model = ChatOllama(
+    model="ministral-3:8b",
+    num_predict=1800,
+    temperature=0,
+    keep_alive=os.getenv("OLLAMA_KEEP_ALIVE", "30m"),
+)
 
 tool_names = ", ".join(tool.name for tool in TOOLS)
 

@@ -1,3 +1,4 @@
+import asyncio
 from discord.ext import commands
 import discord
 from agent.libs.chatbot_answer import chatbot_answer
@@ -10,12 +11,12 @@ async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy
     #     return
     
     text = " ".join(tokens)
-    
-    await ctx.typing()
-    
+
     try:
-        answer = chatbot_answer(text, ctx.author.id, attachments)
+        async with ctx.typing():
+            # Run synchronous LLM call in a worker thread so Discord heartbeats stay responsive.
+            answer = await asyncio.to_thread(chatbot_answer, text, ctx.author.id, attachments)
 
         await ctx.reply(answer)
-    except:
+    except Exception:
         await ctx.reply("Something went wrong")
