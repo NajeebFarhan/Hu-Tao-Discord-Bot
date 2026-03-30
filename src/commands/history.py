@@ -71,9 +71,10 @@ def group_turns(messages: list):
 
 class HistoryView(View):
 
-    def __init__(self, turns, page=0):
+    def __init__(self, name, turns, page=0):
         super().__init__(timeout=120)
-
+        
+        self.name = name
         self.turns = turns
         self.page = page
 
@@ -113,7 +114,7 @@ class HistoryView(View):
         elif interaction.data["custom_id"] == "next":
             self.page += 1
 
-        embed = create_embed(self.turns, self.page)
+        embed = create_embed(self.name, self.turns, self.page)
 
         self.update_buttons()
 
@@ -125,7 +126,7 @@ class HistoryView(View):
         return False
 
 
-def create_embed(turns, page):
+def create_embed(name: str, turns: list, page: int):
 
     start = page * TURNS_PER_PAGE
     end = start + TURNS_PER_PAGE
@@ -133,7 +134,7 @@ def create_embed(turns, page):
     selected = turns[start:end]
 
     embed = discord.Embed(
-        title="Chat History",
+        title=f"{name}'s Chat History",
         description=f"Page {page+1}/{(len(turns)-1)//TURNS_PER_PAGE+1}",
         color=discord.Color.blurple()
     )
@@ -160,19 +161,28 @@ import os
 async def history(ctx: commands.Context, user_id: int | None = None):
     thread_id = ctx.author.id
     
-    if user_id and ctx.author.id == os.environ["OWNER_ID"]:
+    if user_id and str(ctx.author.id) == os.environ["OWNER_ID"]:
         thread_id = user_id
-
-    messages = show_history(thread_id)
-
-    turns = group_turns(messages)[::-1]
-
-    if not turns:
-        await ctx.send("No chat history found.")
+    else:
+        await ctx.send("Only the owner can look into other user's chat history")
         return
+    
+    try:     
+        user = await ctx.bot.fetch_user(thread_id)
 
-    view = HistoryView(turns)
+        messages = show_history(thread_id)
 
-    embed = create_embed(turns, 0)
+        turns = group_turns(messages)[::-1]
 
-    await ctx.send(embed=embed, view=view)
+        if not turns:
+            await ctx.send("No chat history found.")
+            return
+
+        view = HistoryView(user.name, turns)
+
+        embed = create_embed(user.name, turns, 0)
+
+        await ctx.send(embed=embed, view=view)
+        
+    except:
+        await ctx.send("Something went wrong")
