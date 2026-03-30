@@ -1,10 +1,10 @@
 from discord.ext import commands
-from agent.libs.clear_chat import clear_chat
+from agent.libs.clear_chat import clear_chat  #, clear_n_chat
 import os
 
 
 @commands.command()
-async def deletemsg(ctx: commands.Context) -> None:
+async def deletechat(ctx: commands.Context) -> None:
     bot: commands.Bot = ctx.bot
     
     confirmation_msg_ref = await ctx.reply("To delete your chat history, reply this message with `yes` within 10 seconds")
@@ -21,8 +21,13 @@ async def deletemsg(ctx: commands.Context) -> None:
 
         if user_reply.content == "yes":
             try:
+                # if not n:
                 clear_chat(ctx.author.id)
                 await ctx.reply("Your chat history has been deleted")
+                    
+                # elif n > 0: 
+                #     clear_n_chat(ctx.author.id, n)
+                #     await ctx.reply(f"Your last {n if n > 1 else ''} {'messages have' if n > 1 else 'message has'} been deleted")
         
             except:
                 await ctx.reply("Something went wrong. Your chat history is not deleted")
@@ -31,8 +36,6 @@ async def deletemsg(ctx: commands.Context) -> None:
             
     except:
         await ctx.reply("Timeout! Your chat history is not deleted")
-    
-    
 
 
 @commands.command()

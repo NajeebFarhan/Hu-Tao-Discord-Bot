@@ -6,8 +6,6 @@ from discord import Attachment
 from discord.ext.commands import Greedy
 
 def chatbot_answer(prompt: str, user_id: int, attachments: Greedy[Attachment]) -> str:
-    config = {"configurable": {"thread_id": user_id}}
-
     content: list = [
         {"type": "text", "text": prompt},
     ]
@@ -17,7 +15,7 @@ def chatbot_answer(prompt: str, user_id: int, attachments: Greedy[Attachment]) -
 
     result = agent.invoke(
         {"messages": [HumanMessage(content=content)]},
-        config=config,  # type:ignore
+        config={"configurable": {"thread_id": user_id}},
         context=Context(user_id, prompt, attachments),
     )
 

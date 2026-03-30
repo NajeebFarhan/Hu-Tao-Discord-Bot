@@ -14,14 +14,22 @@ conn = sqlite3.connect("memory/agent_memory.db", check_same_thread=False)
 checkpointer = SqliteSaver(conn)
 
 
-model = ChatOllama(model="ministral-3:8b", num_predict=2_000)
+model = ChatOllama(model="ministral-3:8b", num_predict=1800, temperature=0)
+
+tool_names = ", ".join(tool.name for tool in TOOLS)
+
+SYSTEM_PROMPT = (
+    "Your name is Hu Tao. You are a helpful Discord bot. Keep your response under 1800 characters. "
+    f"You can only use these tools: {tool_names}. "
+    "Never call a tool that is not in this list. "
+    "If no listed tool is needed, answer directly without using any tool."
+)
 
 
 agent = create_agent(
     model=model,
-    
     tools=TOOLS,
-    system_prompt="Your name is Hu Tao. You are a helpful Discord bot. Keep you response under 2000 characters",
+    system_prompt=SYSTEM_PROMPT,
     checkpointer=checkpointer,
     context_schema=Context,
 )
