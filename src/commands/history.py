@@ -146,8 +146,8 @@ def create_embed(name: str, turns: list, page: int):
         embed.add_field(
             name=f"{i}.",
             value=(
-                f"**User:** {turn['human']}\n"
-                f"**AI:** {ai_text}"
+                f"**{name}:** {turn['human']}\n"
+                f"**Hu Tao:** {ai_text}"
             ),
             inline=False
         )
@@ -157,16 +157,16 @@ def create_embed(name: str, turns: list, page: int):
 
 import os
 
-@commands.command()
-async def history(ctx: commands.Context, user_id: int | None = None):
+@commands.hybrid_command()
+async def history(ctx: commands.Context):
     thread_id = ctx.author.id
     
-    if user_id:
-        if str(ctx.author.id) == os.environ["OWNER_ID"]:
-            thread_id = user_id
-        else:
-            await ctx.send("Only the owner can look into other user's chat history")
-            return
+    # if user_id:
+    #     if str(ctx.author.id) == os.environ["OWNER_ID"]:
+    #         thread_id = user_id
+    #     else:
+    #         await ctx.send("Only the owner can look into other user's chat history")
+    #         return
     
     try:     
         user = await ctx.bot.fetch_user(thread_id)
