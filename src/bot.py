@@ -3,6 +3,7 @@ from discord.ext import commands
 import logging
 from dotenv import load_dotenv
 import os
+from libs.chat_channel import ChatChannel
 
 load_dotenv()
 
@@ -20,6 +21,7 @@ bot = commands.Bot(command_prefix=BOT_PREFIX, intents=intents)
 @bot.event
 async def on_ready() -> None:
     print("Successfully setup")
+    ChatChannel()
 
 @bot.event
 async def on_connect() -> None:
