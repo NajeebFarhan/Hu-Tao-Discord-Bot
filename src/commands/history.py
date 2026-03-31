@@ -158,15 +158,15 @@ def create_embed(name: str, turns: list, page: int):
 import os
 
 @commands.hybrid_command()
-async def history(ctx: commands.Context):
+async def history(ctx: commands.Context, user_id: int | None = None):
     thread_id = ctx.author.id
     
-    # if user_id:
-    #     if str(ctx.author.id) == os.environ["OWNER_ID"]:
-    #         thread_id = user_id
-    #     else:
-    #         await ctx.send("Only the owner can look into other user's chat history")
-    #         return
+    if user_id:
+        if str(ctx.author.id) == os.environ["OWNER_ID"]:
+            thread_id = user_id
+        # else:
+        #     await ctx.send("Only the owner can look into other user's chat history")
+        #     return
     
     try:     
         user = await ctx.bot.fetch_user(thread_id)
