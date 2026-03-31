@@ -143,9 +143,7 @@ class ChatChannel:
         Returns True if successful.
         """
 
-        if not self.channel_exists(
-            user_id, channel_name
-        ) or channel_name == self.get_default_channel(user_id):
+        if not self.channel_exists(user_id, channel_name):
             return False
 
         with self.connection as conn:
