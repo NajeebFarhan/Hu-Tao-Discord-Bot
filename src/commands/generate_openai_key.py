@@ -1,5 +1,5 @@
 ##################
-# This is an april fools commands
+# This is an april fools command
 #
 ##################
 
@@ -7,6 +7,7 @@ import discord
 from discord.ext import commands
 import asyncio
 import random
+from datetime import datetime
 
 
 fake_keys = [
@@ -136,8 +137,11 @@ fake_keys = [
 @commands.command(name="gengptkey")
 async def gen_openai_key(ctx: commands.Context):
     
+    if datetime.now().strftime("%m-%d") != "04-01": # Only run when it's April 1st
+        return
+    
     # Step 1 — initial message
-    msg = await ctx.send("🔐 Generating OpenAI API key...")
+    msg = await ctx.reply("🔐 Generating OpenAI API key...", mention_author=False)
 
     # Step 2 — fake loading delay
     await asyncio.sleep(random.uniform(2.5, 4.5))
