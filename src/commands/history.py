@@ -165,7 +165,7 @@ async def history(ctx: commands.Context, user_id: int | None = None):
         if str(ctx.author.id) == os.environ["OWNER_ID"]:
             thread_id = user_id
         # else:
-        #     await ctx.send("Only the owner can look into other user's chat history")
+        #     await ctx.reply("Only the owner can look into other user's chat history", mention_author=False)
         #     return
     
     try:     
@@ -176,14 +176,14 @@ async def history(ctx: commands.Context, user_id: int | None = None):
         turns = group_turns(messages)[::-1]
 
         if not turns:
-            await ctx.send("No chat history found.")
+            await ctx.reply("No chat history found.", mention_author=False)
             return
 
         view = HistoryView(user.name, turns)
 
         embed = create_embed(user.name, turns, 0)
 
-        await ctx.send(embed=embed, view=view)
+        await ctx.reply(embed=embed, view=view, mention_author=False)
         
     except:
-        await ctx.send("Something went wrong")
+        await ctx.reply("Something went wrong", mention_author=False)

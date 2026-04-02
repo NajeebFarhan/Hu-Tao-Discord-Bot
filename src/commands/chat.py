@@ -17,6 +17,6 @@ async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy
             # Run synchronous LLM call in a worker thread so Discord heartbeats stay responsive.
             answer = await asyncio.to_thread(chatbot_answer, text, ctx.author.id, attachments)
 
-        await ctx.reply(answer)
+        await ctx.reply(answer, mention_author=False)
     except Exception:
-        await ctx.reply("Something went wrong")
+        await ctx.reply("Something went wrong", mention_author=False)
