@@ -1,5 +1,7 @@
 from discord.ext import commands
-import sqlite3
+from libs.chat_channel import ChatChannel
+
+chat_channel = ChatChannel()
 
 @commands.command()
 @commands.is_owner()

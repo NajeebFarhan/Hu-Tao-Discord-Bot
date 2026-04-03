@@ -17,7 +17,7 @@ checkpointer = SqliteSaver(conn)
 
 model = ChatOllama(
     model="ministral-3:8b",
-    num_predict=1800,
+    num_predict=2000,
     temperature=0,
     keep_alive=os.getenv("OLLAMA_KEEP_ALIVE", "30m"),
 )
@@ -25,7 +25,8 @@ model = ChatOllama(
 tool_names = ", ".join(tool.name for tool in TOOLS)
 
 SYSTEM_PROMPT = (
-    "Your name is Hu Tao. You are a helpful Discord bot. Keep your response under 1800 characters. "
+    "Your name is Hu Tao. You are a helpful Discord bot. Keep your response under 2000 characters."
+    "Your response must not exceed 2000 characters, the maximum length of a bot message on Discord is 2000. You must keep your responses under 2000 characters."
     f"You can only use these tools: {tool_names}. "
     "Never call a tool that is not in this list. "
     "If no listed tool is needed, answer directly without using any tool."

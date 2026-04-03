@@ -2,14 +2,10 @@ import discord
 from discord.ext import commands
 from discord.ui import View, Button
 from agent.libs.history import show_history
+from libs.truncate import truncate
 
 MAX_CHARS = 60
 TURNS_PER_PAGE = 5
-
-
-def truncate(text: str, limit=MAX_CHARS):
-    text = text.replace("\n", " ")
-    return text[:limit] + ("..." if len(text) > limit else "")
 
 
 def format_human_message(content: list[dict]):
@@ -21,7 +17,7 @@ def format_human_message(content: list[dict]):
         for part in content
     )
 
-    result = truncate(text_part)
+    result = truncate(text_part, MAX_CHARS)
 
     if has_image:
         result += " [contains image(s)]"
@@ -44,7 +40,7 @@ def group_turns(messages: list):
 
             if type(m["content"]) == str:
                 current_turn = {
-                    "human": truncate(m["content"]),
+                    "human": truncate(m["content"], MAX_CHARS),
                     "ai": []
                 }
                 
@@ -58,7 +54,7 @@ def group_turns(messages: list):
 
             if current_turn:
                 current_turn["ai"].append(
-                    truncate(m["content"])
+                    truncate(m["content"], MAX_CHARS)
                 )
 
         # tool messages skipped completely
