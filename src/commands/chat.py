@@ -18,7 +18,7 @@ async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy
             # Run synchronous LLM call in a worker thread so Discord heartbeats stay responsive.
             answer = await asyncio.to_thread(chatbot_answer, text, ctx.author.id, attachments)
             
-        answer = truncate(answer, 1995)
+        answer = truncate(answer, 1995, False)
 
         await ctx.reply(answer, mention_author=False)
         

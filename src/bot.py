@@ -3,6 +3,7 @@ from discord.ext import commands
 import logging
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 from libs.chat_channel import ChatChannel
 
 load_dotenv()
@@ -10,10 +11,16 @@ load_dotenv()
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 BOT_PREFIX = os.environ["BOT_PREFIX"]
 
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+
+os.makedirs("logs", exist_ok=True)
+log_filename = datetime.now().strftime("logs/%Y-%m-%d_%H-%M-%S.log")
+
+handler = logging.FileHandler(filename=log_filename, encoding='utf-8', mode='w')
+
 
 intents = discord.Intents.default()
 intents.message_content = True
+
 
 bot = commands.Bot(command_prefix=BOT_PREFIX, intents=intents)
 
