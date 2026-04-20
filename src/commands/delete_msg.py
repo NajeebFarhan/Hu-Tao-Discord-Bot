@@ -1,10 +1,10 @@
 from discord.ext import commands
-from agent.libs.clear_chat import clear_chat  #, clear_n_chat
+from agent.libs.clear_chat import clear_chat #, clear_n_chat
 import os
 
 
 @commands.command()
-async def deletechat(ctx: commands.Context) -> None:
+async def deletechat(ctx: commands.Context, n: int | None = None) -> None:
     bot: commands.Bot = ctx.bot
     
     confirmation_msg_ref = await ctx.reply("To delete your chat history, **reply** this message with `yes` within 10 seconds")
@@ -22,12 +22,11 @@ async def deletechat(ctx: commands.Context) -> None:
         if user_reply.content == "yes":
             try:
                 # if not n:
-                clear_chat(ctx.author.id)
-                await ctx.reply("Your chat history has been deleted")
-                    
+                    clear_chat(ctx.author.id)
+                    await ctx.reply("Your chat history has been deleted")    
                 # elif n > 0: 
-                #     clear_n_chat(ctx.author.id, n)
-                #     await ctx.reply(f"Your last {n if n > 1 else ''} {'messages have' if n > 1 else 'message has'} been deleted")
+                    # clear_n_chat(ctx.author.id, n)
+                    # await ctx.reply(f"Your last {n if n > 1 else ''} {'messages have' if n > 1 else 'message has'} been deleted")
         
             except:
                 await ctx.reply("Something went wrong. Your chat history is not deleted")
@@ -39,11 +38,8 @@ async def deletechat(ctx: commands.Context) -> None:
 
 
 @commands.command()
+@commands.is_owner()
 async def deleteall(ctx: commands.Context) -> None:
-    if int(os.environ["OWNER_ID"]) != ctx.author.id:
-        await ctx.reply("Stay away from it, hacker!")
-        return
-
     bot: commands.Bot = ctx.bot
 
     DANGER_TEXT = "I am about to nuke the whole chat history of all users and I will take the full responsibility for anyone's lost relationship with my bot."
