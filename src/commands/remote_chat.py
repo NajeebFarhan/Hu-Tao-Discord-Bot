@@ -88,6 +88,30 @@ async def remote_delete(ctx: commands.Context, message_id: int, channel_id: int 
     await message.delete()
     
 
+@commands.hybrid_command(aliases=["rdlast"])
+@commands.is_owner()
+async def remote_delete_last(ctx: commands.Context, number: int = 1, channel_id: int | None = None):
+    bot: commands.Bot = ctx.bot
+    
+    if channel_id:
+        channel = bot.get_channel(channel_id)
+    else:
+        channel = ctx.channel
+        
+    if channel:
+        # message = await channel.fetch_message(message_id) # type:ignore
+        async for h in channel.history(limit=number + 1): # type:ignore
+            try:
+                await h.delete()
+            except:
+                pass
+        # for _ in range(number + 1):
+            # await channel.delete_messages()
+    else:
+        return 
+    
+    
+
 @commands.hybrid_command(aliases=["rpin"])
 @commands.is_owner()
 async def remote_pin(ctx: commands.Context, message_id: int, channel_id: int | None, pin: bool):
