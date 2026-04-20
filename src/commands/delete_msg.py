@@ -1,5 +1,5 @@
 from discord.ext import commands
-from agent.libs.clear_chat import clear_chat #, clear_n_chat
+from agent.libs.clear_chat import clear_chat, clear_n_chat
 import os
 
 
@@ -7,7 +7,20 @@ import os
 async def deletechat(ctx: commands.Context, n: int | None = None) -> None:
     bot: commands.Bot = ctx.bot
     
-    confirmation_msg_ref = await ctx.reply("To delete your chat history, **reply** this message with `yes` within 10 seconds")
+    if n and n <= 0:
+        await ctx.reply(f"Sorry, it's nto possible to delete{n} messages", mention_author=False)
+        return
+    
+    if n:
+        warning = f"**Are you sure you want to delete your last {'message' if n == 1 else f'{n} messages'} from the chat history? To confirm:**\n"
+    else:
+        warning = "**Are you sure you want to delete your entire chat history? To confirm:**\n"
+        
+    confirmation_msg_ref = await ctx.reply(
+            f"{warning}"
+            "# Reply `yes` to this message\n"
+            "-# (note: reply this message, sending plain message witout replying will not do anything)"
+        )
     
     def check(m):
         return (
@@ -21,12 +34,12 @@ async def deletechat(ctx: commands.Context, n: int | None = None) -> None:
 
         if user_reply.content == "yes":
             try:
-                # if not n:
+                if not n:
                     clear_chat(ctx.author.id)
                     await ctx.reply("Your chat history has been deleted")    
-                # elif n > 0: 
-                    # clear_n_chat(ctx.author.id, n)
-                    # await ctx.reply(f"Your last {n if n > 1 else ''} {'messages have' if n > 1 else 'message has'} been deleted")
+                elif n > 0: 
+                    clear_n_chat(ctx.author.id, n)
+                    await ctx.reply(f"Your last {n if n > 1 else ''} {'messages have' if n > 1 else 'message has'} been deleted")
         
             except:
                 await ctx.reply("Something went wrong. Your chat history is not deleted")
