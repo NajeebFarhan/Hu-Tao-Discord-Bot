@@ -7,14 +7,42 @@ from libs.carousel import CarouselView
 from libs.smart_chunk import smart_chunk
 
 
+async def get_reference(ctx: commands.Context):
+    ref = ctx.message.reference
+    message = None
+    
+    if ref:
+        if not ref.fail_if_not_exists:
+            return None
+            
+        if ref.message_id:
+            message = await ctx.channel.fetch_message(ref.message_id)
+         
+    if message:   
+        return message
+    
+    return None
+        
+
 
 @commands.command()
-async def chat(ctx: commands.Context, *tokens: str, attachments: commands.Greedy[discord.Attachment]) -> None:
+async def chat(ctx: commands.Context, attachments: commands.Greedy[discord.Attachment]) -> None:
     # if int(os.environ["OWNER_ID"]) != ctx.author.id:
     #     await ctx.reply("Sorry, this command is temporary unavailable.", mention_author=False)
     #     return
     
-    text = " ".join(tokens)
+    text = ctx.message.content.removeprefix((ctx.prefix or "") + "chat")
+    
+    if not text:
+        return
+    
+    ref_message = await get_reference(ctx)
+    
+    if ref_message:
+        if ref_message.content:
+            text = f"{text}\n\n{ref_message.content}"
+        
+        attachments.extend(ref_message.attachments)
 
     try:
         async with ctx.typing():
